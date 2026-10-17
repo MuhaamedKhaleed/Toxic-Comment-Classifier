@@ -18,49 +18,60 @@ An end-to-end NLP pipeline for detecting toxic comments using fine-tuned transfo
 
 ## Project Structure
 
-text
-├── train.py                  # Training and evaluation script
-├── toxic_comment_model/      # Exported model weights and tokenizer
-├── results/                  # Checkpoints from Trainer
-├── logs/                     # Training run logs
-├── requirements.txt          # Project dependencies
-└── README.md                 # Project documentation
-
+```text
+├── main.py           # Training, evaluation, and inference pipeline
+├── requirements.txt  # Project dependencies
+└── README.md         # Project documentation
+```
 
 ## Setup and Installation
 
 ### 1. Clone the Repository
-bash
+
+```bash
 git clone https://github.com/your-username/Toxic-Comment-Classifier.git
 cd Toxic-Comment-Classifier
-
+```
 
 ### 2. Configure Environment
-bash
+
+```bash
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install --upgrade pip
 pip install -r requirements.txt
-
+```
 
 ### 3. Data Preparation
+
 Download the Jigsaw Toxic Comment Classification dataset from Kaggle and place the archive in your working directory:
-bash
+
+```bash
 # Expected dataset archive
 jigsaw-toxic-comment-classification-challenge.zip
+```
 
+### 4. Training and Execution
 
-### 4. Training
-Run the fine-tuning pipeline:
-bash
-python train.py
+Run the training pipeline:
 
+```bash
+python main.py
+```
 
 ### 5. Inference
+
 Use the saved model artifacts with the Hugging Face pipeline:
-python
+
+```python
 from transformers import pipeline
 
 classifier = pipeline('text-classification', model='./toxic_comment_model', tokenizer='./toxic_comment_model')
 result = classifier("This is an exemplary comment.")
 print(result)
+```
+
+## Limitations and Known Issues
+
+- Fine-tuning transformer models is compute-intensive; running without a CUDA-compatible GPU will result in slow training times.
+- Model predictions reflect the dataset distribution and may exhibit false positives on benign text containing informal phrasing or reclaimed keywords.
