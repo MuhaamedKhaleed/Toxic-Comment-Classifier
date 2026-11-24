@@ -1,35 +1,23 @@
-# Byte-compiled / optimized / DLL files
+.venv/
 __pycache__/
 *.py[cod]
-*$py.class
-
-# Environments
 .env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints
-
-# Data and Large Archives
-*.zip
-*.tar.gz
-*.csv
-*.parquet
-jigsaw-toxic-comment-classification-challenge/
-
-# Model weights and artifacts
+.env.*
+!.env.example
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+build/
+dist/
+*.egg-info/
+.pre-commit-cache/
 results/
 logs/
 toxic_comment_model/
-*.pt
-*.bin
 *.safetensors
-
-# OS metadata
-.DS_Store
-Thumbs.db
+*.bin
+*.pt
+*.csv
+*.zip
