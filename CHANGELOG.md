@@ -19,3 +19,7 @@ No trained-model quality, production readiness, deployment, release or license c
 ### Engineering follow-up
 - Use the committed uv lock in CI and key dependency-installer caching by that lock.
 - Complete copy-only profile README drafts and clarify historical versus current verification.
+
+### Synthetic demonstration follow-up
+
+Added standalone invented-input backend demo, checked JSON output and documented limits. Opt-in ML container added where a model backend exists; default lightweight image unchanged. Hosted container verification is required separately.
