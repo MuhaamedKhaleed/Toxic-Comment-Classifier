@@ -42,3 +42,13 @@ Training formerly started implicitly when no model existed. Missing data could l
 ## Outstanding
 
 Verify real local training with licensed data and trusted base artifacts. Evaluate held-out classification metrics, class balance, calibration and subgroup failures. No general quality/fairness/latency claims. Warmup/training defaults need empirical review. Exact-text duplicate rejection is not an author/semantic leakage audit. Existing trained regression artifacts are incompatible. ML deployment needs a separate image/runtime check; current Docker scope is CLI only. Licensing and PR words need review; no automatic main merge.
+
+
+## Gap-closure follow-up (24 November 2026)
+
+The CI source now uses uv 0.13.8 and the committed transitive lock, rather than a new pip resolution of direct pins. Dependency installer caching is keyed by uv.lock. The local matching command is `uv sync --locked --extra dev --extra ml`, followed by the existing tests/quality commands. This does not cache or publish private datasets, weights or model outputs. Public-repository-only guards remain. The changed workflow's hosted outcome must be checked after publication; prior green runs do not validate a changed workflow.
+
+A complete copy-only project-focused profile README draft is appended to presentation.md. No profile account edits, main merge, PR, release or license change is implied by that text. Historical notebook/full-data/quality limitations remain open, not replaced by a passing synthetic test.
+
+
+Actual-backend follow-up: a locally initialized tiny DistilBERT and local DistilBERT tokenizer performed a real optimizer epoch on 20 invented unique comments. Tests confirmed changed network weights, finite validation loss, safetensors save, local reload, and prediction through classify. Full suite: 25 passed, 94% package statement coverage. This closes the earlier no-optimizer-execution gap, not real toxicity quality. No pretrained weights or external dataset were used.
