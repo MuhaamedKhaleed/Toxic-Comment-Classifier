@@ -65,7 +65,7 @@ def safe_extract_zip(zip_path: Path, extract_to: Path) -> None:
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         for member in zip_ref.namelist():
             member_path = (extract_to / member).resolve()
-            if not str(member_path).startswith(str(resolved_target)):
+            if not member_path.is_relative_to(resolved_target):
                 raise ValueError(f"Unsafe path detected in zip archive: {member}")
         zip_ref.extractall(extract_to)
 
@@ -115,7 +115,7 @@ class ToxicCommentDataset(torch.utils.data.Dataset):
     def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
         item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
         # Convert labels to float for sequence classification loss
-        item["labels"] = torch.tensor(self.labels[idx]).float()
+        item["labels"] = torch.tensor(self.labels[idx], dtype=torch.long)
         return item
 
     def __len__(self) -> int:
@@ -171,7 +171,10 @@ def train_model(
     train_dataset = ToxicCommentDataset(train_encodings, train_labels.tolist())
     test_dataset = ToxicCommentDataset(test_encodings, test_labels.tolist())
 
-    model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=1)
+    model = AutoModelForSequenceClassification.from_pretrained(
+        model_name, num_labels=2, problem_type="single_label_classification",
+        id2label={0: "non_toxic", 1: "toxic"}, label2id={"non_toxic": 0, "toxic": 1},
+    )
 
     training_args = TrainingArguments(
         output_dir=output_dir,
@@ -305,8 +308,6 @@ def main() -> None:
     # Determine whether training should run
     should_train = args.train
     df: Optional[pd.DataFrame] = None
-    if not should_train and not Path(args.model_dir).exists():
-        should_train = True
 
     if should_train:
         try:
@@ -314,7 +315,7 @@ def main() -> None:
         except FileNotFoundError as err:
             if args.train or not Path(args.model_dir).exists():
                 logger.error("%s", err)
-                return
+                raise SystemExit(2) from err
 
         if df is not None:
             train_model(
