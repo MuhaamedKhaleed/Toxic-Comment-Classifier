@@ -1,0 +1,19 @@
+{
+  "synthetic_only": true,
+  "scope": "invented_comments_random_DistilBERT_not_toxicity_quality",
+  "quality_claim": false,
+  "result": {
+    "training": {
+      "eval_loss": 0.693148672580719,
+      "eval_runtime": 0.0026,
+      "eval_samples_per_second": 1526.45,
+      "eval_steps_per_second": 381.613,
+      "epoch": 1.0
+    },
+    "weights_changed": true,
+    "prediction": {
+      "label": "non_toxic",
+      "score": 0.5002813339233398
+    }
+  }
+}
