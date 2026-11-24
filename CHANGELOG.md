@@ -14,3 +14,8 @@
 - Honest verification, behavior-change and presentation documentation.
 
 No trained-model quality, production readiness, deployment, release or license claim.
+
+
+### Engineering follow-up
+- Use the committed uv lock in CI and key dependency-installer caching by that lock.
+- Complete copy-only profile README drafts and clarify historical versus current verification.
