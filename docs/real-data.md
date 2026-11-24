@@ -12,3 +12,14 @@ Download the official Civil Comments validation parquet from https://huggingface
 ## Actual limits
 
 real text training-path proof, not useful moderation quality; binary threshold discards label uncertainty; no fairness/accuracy claim
+
+## Explicit primary-source download and preparation
+
+```sh
+uv sync --locked --extra dev --extra ml
+uv run --with pyarrow==19.0.1 python scripts/fetch_real_data.py --output ./real-source
+uv run --no-sync python scripts/demo.py ./tiny-base-demo
+uv run --no-sync python scripts/real_data.py --data ./real-source --base-model ./tiny-base-demo/base
+```
+
+The explicit helper downloads about21MB from the official Google dataset repository, verifies the exact source SHA-256 and streams batches to select128 unique comments per thresholded label. It never runs at import/install. Its separate preparation dependency is pinned pyarrow19.0.1 through `uv run --with`, not included in the core lock. For offline preparation add `--cached /path/to/files` containing civil-validation.parquet. Output directory must be new. The tiny-base demo creates an untrained synthetic vocabulary and runs its own synthetic wiring check first; it is not a useful moderation model. Substitute a trusted compatible local DistilBERT only with its own rights/provenance checks. Actual teacher-forced training metrics and limitations above still apply.
