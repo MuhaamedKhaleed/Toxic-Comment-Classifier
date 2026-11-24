@@ -14,6 +14,7 @@ ENV PATH="/app/.venv/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
 RUN useradd --create-home --uid 10001 app
 COPY --from=builder /app/.venv /app/.venv
 COPY scripts/demo.py /app/demo.py
+COPY scripts /app/scripts
 USER app
 WORKDIR /home/app
 ENTRYPOINT ["python", "/app/demo.py"]
