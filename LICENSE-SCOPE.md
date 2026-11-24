@@ -1,0 +1,5 @@
+# License scope and external material
+
+The owner's MIT default applies to the newly added, project-owned Python package under `src/`, tests, helper scripts, documentation and engineering configuration in this review branch. `LICENSE` supplies those terms. This notice does not claim ownership of third-party material or relicense pre-existing notebooks, scripts, archives or other inherited assets whose provenance has not been established. Those require a separate rights review before redistribution under this license. Any existing source notices must be retained.
+
+Datasets, downloaded pretrained models, recovered checkpoints, training images, example photos from external sources and dependencies are not granted an MIT license by this repository. They retain their own terms, including access, privacy and attribution obligations. No external dataset or model has been added as part of this license change. References and links do not establish permission to redistribute. Verify provenance and applicable terms before using real data or distributing model artifacts. No claim of rights clearance is made for historical experiments.
