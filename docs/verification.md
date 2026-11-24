@@ -5,7 +5,7 @@ Python 3.11.18, CPU. No paid APIs, training, pretrained-weight download or deplo
 ## Observed local checks
 
 - `uv sync --extra dev`: editable package installed and lock resolved.
-- `uv sync --locked --extra dev`: locked install passed.
+- `uv sync --locked --extra dev`: locked install passed. The lock targets Linux x86_64, matching verification and CI; other platforms are unverified.
 - `python -m toxic_comments --help`, `toxic-comments --help`, `toxic-comments train --help`: passed.
 - `toxic-comments check-data --data /tmp/toxic-example.csv`: returned rows=2, toxic=1, non_toxic=1 for synthetic input documented in README.
 - `toxic-comments predict --text hello`: exit 2 with missing model-path guidance.
