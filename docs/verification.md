@@ -52,3 +52,7 @@ A complete copy-only project-focused profile README draft is appended to present
 
 
 Actual-backend follow-up: a locally initialized tiny DistilBERT and local DistilBERT tokenizer performed a real optimizer epoch on 20 invented unique comments. Tests confirmed changed network weights, finite validation loss, safetensors save, local reload, and prediction through classify. Full suite: 25 passed, 94% package statement coverage. This closes the earlier no-optimizer-execution gap, not real toxicity quality. No pretrained weights or external dataset were used.
+
+## Standalone synthetic demo and CPU container follow-up
+
+`python scripts/demo.py NEW_DIRECTORY` ran successfully in the locked local environment, with actual backend training/artifact/reload/inference where a model backend exists. `docs/demo-output.json` records one actual run, labeled synthetic-only with no quality claim. A subprocess regression checks the report and no-overwrite behavior. Tests, lint/format and package mypy rerun locally. OCR demo is decoder-only, monitoring uses actual SciPy. `Dockerfile.ml` is opt-in where applicable; hosted build/run evidence must be checked after publication, not inferred from local Python.
