@@ -87,3 +87,11 @@ The source script advertised end-to-end classification but configured scalar reg
 Before making quality claims: obtain a licensed dataset and compatible local artifacts, verify actual training and trained-checkpoint inference, evaluate stratified held-out data separated from tuning, report precision/recall/F1 and class balance, assess subgroup errors and calibration, and review truncation beyond 64 tokens. Exact-duplicate rejection is not a semantic or author-level leakage audit. A binary `toxic` target does not implement all six Jigsaw labels. No automatic moderation policy or fairness guarantee follows.
 
 No repository/model/data license was added. Rights and model/data terms require separate review. Main remains unchanged; this is a review branch, not a release.
+
+
+Actual-backend follow-up: a locally initialized tiny DistilBERT and local DistilBERT tokenizer performed a real optimizer epoch on 20 invented unique comments. Tests confirmed changed network weights, finite validation loss, safetensors save, local reload, and prediction through classify. Full suite: 25 passed, 94% package statement coverage. This closes the earlier no-optimizer-execution gap, not real toxicity quality. No pretrained weights or external dataset were used.
+
+
+## License scope
+
+New project-owned package/engineering files use the owner's MIT default. See LICENSE and LICENSE-SCOPE.md. This is not permission to relicense historical notebooks, third-party code, datasets, models or weights. Their provenance and terms still need review. Earlier verification entries saying no license was added describe the initial pilot, not this follow-up.
