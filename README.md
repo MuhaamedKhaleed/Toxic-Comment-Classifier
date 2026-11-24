@@ -21,7 +21,7 @@ python -m mypy src
 python -m pre_commit run --all-files
 ```
 
-Alternatively, with uv installed, `uv sync --locked --extra dev` uses the committed lockfile. Runtime dependencies are Typer, Click and python-dotenv; optional ML dependencies are Torch, Transformers, scikit-learn and Accelerate. No secret is required. Dependency installation requires internet; the runtime commands do not fetch models.
+Alternatively, with uv installed, `uv sync --locked --extra dev` uses the committed Linux x86_64 lockfile. This lock targets the verified runner/CPU environment; other platforms can use pip but are unverified. Runtime dependencies are Typer, Click and python-dotenv; optional ML dependencies are Torch, Transformers, scikit-learn and Accelerate. No secret is required. Dependency installation requires internet; the runtime commands do not fetch models.
 
 ## Offline data example
 
