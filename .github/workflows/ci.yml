@@ -13,7 +13,7 @@ jobs:
   checks:
     if: github.event.repository.private == false
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
@@ -33,9 +33,9 @@ jobs:
       - name: Offline tests
         run: uv run --no-sync python -m pytest --cov=toxic_comments --cov-report=term-missing
       - name: Lint
-        run: uv run --no-sync python -m ruff check src tests
+        run: uv run --no-sync python -m ruff check src tests scripts/demo.py
       - name: Format
-        run: uv run --no-sync python -m ruff format --check src tests
+        run: uv run --no-sync python -m ruff format --check src tests scripts/demo.py
       - name: Types
         run: uv run --no-sync python -m mypy src
       - name: Pre-commit
@@ -55,3 +55,9 @@ jobs:
           status=$?
           set -e
           test "$status" = 2
+      - name: Standalone synthetic demo
+        run: uv run --no-sync python scripts/demo.py /tmp/standalone-synthetic-demo
+      - name: Opt-in locked CPU ML container
+        run: |
+          docker build -f Dockerfile.ml --tag synthetic-ml:ci .
+          docker run --rm --network none synthetic-ml:ci
