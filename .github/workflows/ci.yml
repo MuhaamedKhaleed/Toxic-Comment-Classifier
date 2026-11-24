@@ -33,9 +33,9 @@ jobs:
       - name: Offline tests
         run: uv run --no-sync python -m pytest --cov=toxic_comments --cov-report=term-missing
       - name: Lint
-        run: uv run --no-sync python -m ruff check src tests scripts/demo.py
+        run: uv run --no-sync python -m ruff check src tests scripts
       - name: Format
-        run: uv run --no-sync python -m ruff format --check src tests scripts/demo.py
+        run: uv run --no-sync python -m ruff format --check src tests scripts
       - name: Types
         run: uv run --no-sync python -m mypy src
       - name: Pre-commit
