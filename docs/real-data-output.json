@@ -1,0 +1,17 @@
+{
+  "real_data": true,
+  "dataset": "Civil Comments",
+  "source": "https://www.tensorflow.org/datasets/catalog/civil_comments",
+  "license": "CC0 source dataset",
+  "subset": "balanced128+128 from official validation partition repurposed as development; original train/test not used; toxicity>=.5",
+  "base": "tiny random DistilBERT/local synthetic vocabulary from engineering demo, not pretrained language ability",
+  "training": {
+    "eval_loss": 0.6931473016738892,
+    "eval_runtime": 0.0102,
+    "eval_samples_per_second": 5088.275,
+    "eval_steps_per_second": 391.406,
+    "epoch": 1.7692307692307692
+  },
+  "elapsed_seconds": 4.03,
+  "limits": "real text training-path proof, not useful moderation quality; binary threshold discards label uncertainty; no fairness/accuracy claim"
+}
