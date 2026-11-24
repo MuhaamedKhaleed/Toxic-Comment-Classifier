@@ -99,3 +99,7 @@ New project-owned package/engineering files use the owner's MIT default. See LIC
 ## Checked synthetic wiring demo
 
 See [commands, saved output and scope](docs/synthetic-demo.md). This is invented-input execution evidence, not model accuracy or a real-data gallery.
+
+## Real-data CPU example
+
+See [actual results, source terms and explicit download/preparation commands](docs/real-data.md). These are small development runs, not accuracy or production guarantees. No model/data is committed.
