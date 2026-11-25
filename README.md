@@ -120,3 +120,18 @@ uv run --with pyarrow==19.0.1 python scripts/distilbert_pilot.py --data ./real-s
 ```
 
 Recorded result (25 Nov 2026, one CPU core): F1 0.8012, precision 0.7135, recall 0.9133, AUROC 0.8725 on 300 development comments from a balanced subset, about 25 minutes, peak memory 1.77 GB. This is not a held-out benchmark or natural-prevalence estimate. Needs about 2 GB RAM, so use a 2 GB+ machine or a free Kaggle/Colab notebook. See `docs/distilbert-pilot.md`.
+
+### Free Kaggle notebook route (verified 25 Nov 2026)
+
+On a Kaggle CPU notebook with internet on, `uv sync --locked` failed ("torch==2.4.1+cpu has no wheel for the current platform"), so the locked environment does not install there. Use the notebook's preinstalled Python, torch, transformers and pyarrow instead:
+
+```sh
+git clone -b toxic-engineering-pilot --depth 1 https://github.com/MuhaamedKhaleed/Toxic-Comment-Classifier
+cd Toxic-Comment-Classifier
+export PYTHONPATH=$PWD/src
+python scripts/fetch_real_data.py --output ./real-source
+python scripts/fetch_encoder.py --output ./distilbert-encoder
+python scripts/distilbert_pilot.py --data ./real-source --encoder ./distilbert-encoder --output ./pilot-out
+```
+
+One run on a Kaggle CPU session (Python 3.13, 4 CPU, 31 GB RAM) finished in about 15 minutes: F1 0.7754, precision 0.8492, recall 0.7133, accuracy 0.7933, AUROC 0.8822 on the same 300-row balanced development slice, 1,200 fit rows, 2 epochs. The exact torch and transformers versions of that run were not recorded, so it is a separate observation from the 0.8012 run above, not a confidence range. Training order and initialization are not seeded. The fine-tuned weights stay inside the notebook output; nothing is published.
