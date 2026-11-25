@@ -8,6 +8,7 @@ def main():
     parser.add_argument("--data", required=True, help="Prepared local source directory")
     parser.add_argument("--base-model", help="Trusted compatible local DistilBERT directory")
     parser.add_argument("--manifest", help="Reviewed selected Open Images source manifest")
+    parser.add_argument("--epochs", type=int, default=2, help="Training epochs (default: the small recorded run)")
     args = parser.parse_args()
     import os
     import pathlib
@@ -23,7 +24,7 @@ def main():
     rows = json.loads((root / "civil-256.json").read_text())
     start = time.time()
     result = run_training(
-        rows, pathlib.Path(args.base_model), root / "toxic-real-model", epochs=2, batch_size=16
+        rows, pathlib.Path(args.base_model), root / "toxic-real-model", epochs=args.epochs, batch_size=16
     )
     report = {
         "real_data": True,
