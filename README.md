@@ -4,6 +4,19 @@ A local binary-toxicity experiment with an offline data validator and explicit t
 
 Status: package and offline checks verified. No Jigsaw training, trained-checkpoint evaluation, accuracy, latency or production moderation claim is made. A random tiny DistilBERT forward pass checks the two-class loss wiring only.
 
+## Real-data quickstart (about 2 minutes)
+
+Needs Python 3.11 or 3.12 (the locked PyTorch/TensorFlow wheels have no 3.13+ build); `--python 3.11` makes uv fetch it. Needs internet for the first install and downloads, and roughly 2 GB of free RAM.
+
+```sh
+uv sync --python 3.11 --locked --extra dev --extra ml
+uv run --no-sync python scripts/fetch_encoder.py --output ./encoder                      # pinned DistilBERT, Apache-2.0
+uv run --with pyarrow==19.0.1 python scripts/fetch_real_data.py --output ./real-source   # ~21 MB Civil Comments validation
+uv run --with pyarrow==19.0.1 python scripts/distilbert_pilot.py --data ./real-source --encoder ./encoder --output ./toxic-out --per-class 200 --epochs 2
+uv run --no-sync toxic-comments predict --text "have a lovely day" --model-dir ./toxic-out/best-model
+```
+Output: fine-tuned `toxic-out/best-model` plus `report.json` (F1, precision, recall), then a JSON label and score. Tweak `--per-class`, `--epochs`, `--batch-size`, `--max-length`. A 60-per-class, 1-epoch run on 25 Nov 2026 took about 25 s and reached dev F1 0.71 (tiny and weak, mostly predicts `toxic`); more data and epochs are the knob. `scripts/real_data.py` is only a wiring check with a random tiny model and is not the useful route.
+
 ## Install and check
 
 Python 3.11+:
