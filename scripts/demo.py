@@ -9,6 +9,8 @@ import sys
 def main() -> None:
     for key, value in {
         "CUDA_VISIBLE_DEVICES": "-1",
+        "USE_TF": "0",
+        "USE_JAX": "0",
         "HF_HUB_OFFLINE": "1",
         "TRANSFORMERS_OFFLINE": "1",
         "TF_CPP_MIN_LOG_LEVEL": "3",
