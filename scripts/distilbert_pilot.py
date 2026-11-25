@@ -242,6 +242,7 @@ def main():
         if metrics["f1"] > best_f1:
             best_f1 = metrics["f1"]
             model.save_pretrained(args.output / "best-model")
+            tokenizer.save_pretrained(args.output / "best-model")  # needed by `toxic-comments predict`
         state = {
             "scorer_version": "two-logit-softmax-v1",
             "config": config,
