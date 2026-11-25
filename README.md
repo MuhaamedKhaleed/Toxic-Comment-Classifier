@@ -107,3 +107,16 @@ See [actual results, source terms and explicit download/preparation commands](do
 ## Measured CPU quality follow-up
 
 See [quality experiments, results and limits](docs/quality-cpu.md). These go beyond wiring smokes; some improve measured results, while others expose overfit or a stronger simple baseline. No quality guarantee.
+
+## Fresh-clone path to a pretrained DistilBERT fine-tune
+
+The quickstart in `docs/real-data.md` uses a tiny random base to prove wiring only (loss stays at 0.693). The original neural path with real pretrained weights is `scripts/distilbert_pilot.py`. Download the pinned, hash-checked `distilbert-base-uncased` encoder (Apache-2.0, revision 12040acca...) and the Civil Comments validation parquet, then run it:
+
+```sh
+uv sync --locked --extra dev --extra ml
+uv run --with pyarrow==19.0.1 python scripts/fetch_real_data.py --output ./real-source
+uv run --no-sync python scripts/fetch_encoder.py --output ./distilbert-encoder
+uv run --with pyarrow==19.0.1 python scripts/distilbert_pilot.py --data ./real-source --encoder ./distilbert-encoder --output ./pilot-out
+```
+
+Recorded result (25 Nov 2026, one CPU core): F1 0.8012, precision 0.7135, recall 0.9133, AUROC 0.8725 on 300 development comments from a balanced subset, about 25 minutes, peak memory 1.77 GB. This is not a held-out benchmark or natural-prevalence estimate. Needs about 2 GB RAM, so use a 2 GB+ machine or a free Kaggle/Colab notebook. See `docs/distilbert-pilot.md`.
