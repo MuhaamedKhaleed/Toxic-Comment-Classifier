@@ -1,8 +1,14 @@
 """Tiny offline optimizer and artifact checks, not a toxicity benchmark."""
 
+import os
 from pathlib import Path
 
 import pytest
+
+# Match scripts/demo.py: keep co-installed TensorFlow out of the torch path
+# (transformers probes TF when it is installed and trips on Keras 3).
+os.environ.setdefault("USE_TF", "0")
+os.environ.setdefault("USE_JAX", "0")
 
 pytest.importorskip("torch")
 pytest.importorskip("transformers")
@@ -26,6 +32,8 @@ def test_actual_training_updates_weights_and_predicts(
 
     monkeypatch.setenv("HF_HUB_OFFLINE", "1")
     monkeypatch.setenv("TRANSFORMERS_OFFLINE", "1")
+    monkeypatch.setenv("USE_TF", "0")
+    monkeypatch.setenv("USE_JAX", "0")
     torch.set_num_threads(1)
     torch.manual_seed(42)
     base = tmp_path / "base"
