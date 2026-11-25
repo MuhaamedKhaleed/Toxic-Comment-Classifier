@@ -56,9 +56,7 @@ def main():
     args.output.mkdir(parents=True, exist_ok=False)
     for name, url, expected in FILES:
         target = args.output / name
-        with urllib.request.urlopen(url, timeout=120) as source, target.open(
-            "wb"
-        ) as out:
+        with urllib.request.urlopen(url, timeout=120) as source, target.open("wb") as out:
             shutil.copyfileobj(source, out)
         if hashlib.sha256(target.read_bytes()).hexdigest() != expected:
             target.unlink()
