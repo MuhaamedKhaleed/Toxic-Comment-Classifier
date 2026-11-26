@@ -1,0 +1,39 @@
+{
+  "source": "https://www.tensorflow.org/datasets/catalog/civil_comments",
+  "dataset": "Official validation repurposed into development-only train/dev/finalholdout, not officialtest",
+  "selection": "First5000exactunique each toxicity>=.5class, balanced artificial prevalence",
+  "train": 7000,
+  "dev": 1500,
+  "test": 1500,
+  "dev_trials": [
+    {
+      "C": 0.5,
+      "development_f1": 0.7479452054794521
+    },
+    {
+      "C": 2,
+      "development_f1": 0.7696476964769647
+    },
+    {
+      "C": 8,
+      "development_f1": 0.7762803234501348
+    }
+  ],
+  "chosen_C": 8,
+  "test_f1": 0.7709190672153635,
+  "test_roc_auc": 0.8581848888888889,
+  "test_accuracy": 0.7773333333333333,
+  "test_confusion": [
+    [
+      604,
+      146
+    ],
+    [
+      188,
+      562
+    ]
+  ],
+  "elapsed_seconds": 3.2991271018981934,
+  "peak_rss_kb": 265656,
+  "limits": "Transparent TFIDFlinearbaseline, not neural DistilBERT replacement; split from officialvalidation, artificialbalancedprevalence, no demographic fairness/realworldmoderation guarantee; finalholdout read once after devselection"
+}

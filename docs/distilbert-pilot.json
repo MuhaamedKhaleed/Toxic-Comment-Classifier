@@ -1,0 +1,85 @@
+{
+  "interrupted_resumed": true,
+  "resume_behavior": "The interrupted run resumed by reloading the best saved checkpoint with a fresh AdamW optimizer: an interrupted continuation, not an exact optimizer-state resume.",
+  "source": "https://www.tensorflow.org/datasets/catalog/civil_comments",
+  "source_sha256": "2e0eb65474e7e1290df8689fc93eea783160c898c09ae15382c0a9662367bd03",
+  "encoder": {
+    "repo": "distilbert/distilbert-base-uncased",
+    "revision": "12040accade4e8a0f71eabdb258fecc2e7e948be",
+    "license": "Apache-2.0"
+  },
+  "model": "Original neural path: pretrained DistilBERT with two-class head, embeddings and lower 4 transformer layers frozen under free local resource limits; top layers and head fine-tuned.",
+  "parameters": {
+    "total": 66955010,
+    "trainable": 14767874
+  },
+  "data": {
+    "unique_source_rows_scanned": 96805,
+    "fit_rows": 1200,
+    "fit_class_counts": {
+      "toxic": 587,
+      "non_toxic": 613
+    },
+    "dev_rows": 300,
+    "dev_class_counts": {
+      "toxic": 150,
+      "non_toxic": 150
+    },
+    "selection": "Exact-text deduplicated, seeded Python RNG (20261125). Pool of 1500 per class shuffled, first 1500 combined kept (near-balanced, actual counts recorded: 587 toxic / 613 non-toxic fit). Development carve-out is exactly 150 per class; remainder fits. Only the data-selection RNG was seeded in the executed run; training order and dropout were not deterministically seeded, so retraining does not reproduce the exact weights."
+  },
+  "training": {
+    "epochs": 2,
+    "batch_size": 8,
+    "max_length": 96,
+    "optimizer": "AdamW lr 2e-5"
+  },
+  "checkpoint_selection": {
+    "rule_intended": "Best development F1 with the two-logit softmax scorer.",
+    "rule_actually_applied": "SUPERSEDED: epoch selection during the executed run scored development with sigmoid(logit1) instead of softmax over both logits. Under that wrong scorer epoch 1 (F1 .8012) beat epoch 2 (F1 .7762), so the epoch-1 checkpoint was saved. Only the epoch-1 checkpoint persists; epoch-2 weights were not retained, so re-selection under the correct scorer is impossible. The corrected metrics below evaluate the persisted epoch-1 checkpoint as-is and do NOT imply it is the best checkpoint under the correct scorer.",
+    "threshold_note": "Softmax prob >= 0.5 tests logit1 >= logit0 while the legacy sigmoid(logit1) >= 0.5 tests logit1 >= 0; the methods disagree whenever sign(logit1) != sign(logit1 - logit0). Verified empirically from the persisted Nx2 logits: 0 of 300 development rows meet that condition, so the two scorers necessarily produce identical predictions, confusion (TP137/FP55/FN13/TN95) and threshold metrics on this checkpoint and slice; only the ranking metrics (ROC-AUC, average precision) change. This is an observed property of this checkpoint on this slice, not a general equivalence. Per-row logits and both scorers' predictions are preserved for audit."
+  },
+  "dev_metrics_threshold_0.5": {
+    "scorer": "softmax over both logits; ROC-AUC and average precision from sklearn 1.6.1 standard implementations",
+    "f1": 0.8011695906432749,
+    "precision": 0.7135416666666666,
+    "recall": 0.9133333333333333,
+    "accuracy": 0.7733333333333333,
+    "confusion": {
+      "tp": 137,
+      "fp": 55,
+      "fn": 13,
+      "tn": 95
+    },
+    "roc_auc": 0.8725333333333334,
+    "average_precision": 0.8302378017533271
+  },
+  "scorer_disagreement_audit": {
+    "development_rows": 300,
+    "potential_disagreement_rows": 0,
+    "potential_disagreement_condition": "sign(logit1) != sign(logit1 - logit0)",
+    "actual_prediction_disagreements": 0
+  },
+  "superseded_legacy_metrics": {
+    "note": "Original report values, kept for audit only. Scored with sigmoid(logit1) and custom rank-metric code whose ROC curve omitted the origin and whose average precision handled ties non-standardly. Do not cite.",
+    "epoch_history": [
+      {
+        "epoch": 1,
+        "dev_f1": 0.8011695906432749,
+        "dev_precision": 0.7135416666666666,
+        "dev_recall": 0.9133333333333333
+      },
+      {
+        "epoch": 2,
+        "dev_f1": 0.7762237762237763,
+        "dev_precision": 0.8161764705882353,
+        "dev_recall": 0.74
+      }
+    ],
+    "roc_auc_custom": 0.876311111111111,
+    "average_precision_custom": 0.8432121700032434,
+    "rescore_reproduction_check": "The post-hoc rescore reproduced every legacy threshold metric and both custom rank metrics exactly (TP137/FP55/FN13/TN95, AUC .87631, AP .84321) from the persisted checkpoint and the seeded selection, confirming the development slice and checkpoint are unchanged; only the scorer changed."
+  },
+  "elapsed_seconds": 183.49216055870056,
+  "peak_rss_kb": 1810544,
+  "limits": "Development slice carved from an already fully exposed source; not an untouched benchmark and not natural prevalence (development balanced by construction). Partial fine-tune under 2 GB free RAM, not full fine-tuning. Not comparable in rank to the TF-IDF baseline: selection, size and split differ. Probabilities are not calibrated risk. Labels are averaged annotator judgments, no subgroup fairness evaluation. Do not automate punitive moderation decisions from this model."
+}

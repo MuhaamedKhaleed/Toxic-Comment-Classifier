@@ -1,6 +1,3 @@
-torch>=2.0.0
-transformers>=4.30.0
-datasets>=2.14.0
-accelerate>=0.21.0
-scikit-learn>=1.2.0
-pandas>=2.0.0
+# Install runtime from the canonical project metadata.
+-e .
+# Optional ML backend: python -m pip install -e ".[ml]"
