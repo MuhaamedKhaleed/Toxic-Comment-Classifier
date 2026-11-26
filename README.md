@@ -2,7 +2,7 @@
 
 A local binary-toxicity experiment with an offline data validator and explicit training/inference commands. This engineering pilot fixes unsafe archive validation, implicit training and a scalar regression head that did not match the binary classification task.
 
-Status: package and offline checks verified. No Jigsaw training, trained-checkpoint evaluation, accuracy, latency or production moderation claim is made. A random tiny DistilBERT forward pass checks the two-class loss wiring only.
+Status: package and offline checks verified, plus small fine-tuning runs of a pretrained DistilBERT on public Civil Comments data (quickstart below). Those scores are development numbers on a small balanced slice, not a held-out benchmark. No Jigsaw training, latency or production moderation claim is made.
 
 ## Real-data quickstart (about 2 minutes)
 
@@ -60,14 +60,14 @@ Observed JSON:
 
 ## Local model commands
 
-Help and missing-input errors were checked. The following actual ML operations are documented interfaces, **not verified end-to-end recipes** in this pilot:
+Help and missing-input errors were checked. The following actual ML operations are documented interfaces, **not verified end-to-end recipes** by themselves; the end-to-end route is the DistilBERT quickstart and the pilot sections below:
 
 ```text
 toxic-comments predict --text COMMENT --model-dir LOCAL_MODEL
 toxic-comments train --data LOCAL_CSV --base-model LOCAL_DISTILBERT --model-dir NEW_OUTPUT
 ```
 
-Use `python -m pip install -e '.[ml]'` for the optional ML backend. Training must be explicitly requested. It uses supplied local artifacts only, two named classes (`non_toxic`, `toxic`), integer labels and cross-entropy loss. It rejects duplicate comments and inadequate sampled class counts before splitting. Defaults preserve two epochs, batch size 32 and max length 64; the CLI defaults to using all supplied rows rather than silently sampling 10%. No pretrained model download, training or trained-checkpoint inference has been run here. A temporary tiny random model/tokenizer was saved and loaded through the actual local inference adapter to verify artifact wiring, not prediction quality. Old one-output regression checkpoints are incompatible, not repaired by changing the label text.
+Use `python -m pip install -e '.[ml]'` for the optional ML backend. Training must be explicitly requested. It uses supplied local artifacts only, two named classes (`non_toxic`, `toxic`), integer labels and cross-entropy loss. It rejects duplicate comments and inadequate sampled class counts before splitting. Defaults preserve two epochs, batch size 32 and max length 64; the CLI defaults to using all supplied rows rather than silently sampling 10%. The pretrained-encoder runs are documented in the sections below. A temporary tiny random model/tokenizer was saved and loaded through the actual local inference adapter to verify artifact wiring, not prediction quality. Old one-output regression checkpoints are incompatible, not repaired by changing the label text.
 
 `predict` accepts `TOXIC_MODEL_DIR` from the process or an explicitly supplied `--env-file`; `--model-dir` wins. See `.env.example`. Only load trusted local model/tokenizer files. Generic `LABEL_0`/`LABEL_1` results are rejected rather than guessed. A returned score is not proof of calibration.
 
@@ -91,7 +91,7 @@ Observed: 24 tests pass, 91% package statement coverage. This is software covera
 
 ## Container and CI
 
-The multi-stage non-root image is a lightweight data-check/CLI image. It excludes the optional ML stack, datasets and weights. Local Docker is unavailable. Hosted build/smoke status must be checked in Actions before claiming success. CI uses only a free standard public-repository runner, no cache, uploaded artifact or image publication, and skips its job if the repository is private. No hosted inference service was deployed.
+The multi-stage non-root image is a lightweight data-check/CLI image. It excludes the optional ML stack, datasets and weights. Docker is verified by hosted CI (Actions tab), not a local daemon. CI uses only a free standard public-repository runner, no cache, uploaded artifact or image publication, and skips its job if the repository is private. No hosted inference service was deployed.
 
 ## Limits and next work
 
@@ -99,7 +99,7 @@ The source script advertised end-to-end classification but configured scalar reg
 
 Before making quality claims: obtain a licensed dataset and compatible local artifacts, verify actual training and trained-checkpoint inference, evaluate stratified held-out data separated from tuning, report precision/recall/F1 and class balance, assess subgroup errors and calibration, and review truncation beyond 64 tokens. Exact-duplicate rejection is not a semantic or author-level leakage audit. A binary `toxic` target does not implement all six Jigsaw labels. No automatic moderation policy or fairness guarantee follows.
 
-No repository/model/data license was added. Rights and model/data terms require separate review. Main remains unchanged; this is a review branch, not a release.
+The owner's MIT default covers only the new project-owned files (see License scope below). Rights and model/data terms require separate review. This is not a release.
 
 
 Actual-backend follow-up: a locally initialized tiny DistilBERT and local DistilBERT tokenizer performed a real optimizer epoch on 20 invented unique comments. Tests confirmed changed network weights, finite validation loss, safetensors save, local reload, and prediction through classify. Full suite: 25 passed, 94% package statement coverage. This closes the earlier no-optimizer-execution gap, not real toxicity quality. No pretrained weights or external dataset were used.
